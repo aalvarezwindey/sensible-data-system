@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+import logging
+import argparse
+from model.covid_survey import CovidSurvey
+from model.digital_signer import DigitalSigner
+
+def parse_arguments():
+  parser = argparse.ArgumentParser()
+
+  parser.add_argument("-p", "--private-key", default="/keys/patient_private_key.pem", help="private key path to sign the data")
+  parser.add_argument("-i", "--input", help="input data json file path to be signed, if not set the survey will be asked")
+  parser.add_argument("-o", "--output", default="/output/sign_base64", help="output path for the digital sign")
+
+
+  return parser.parse_args()
+
+def initialize_log():
+	"""
+	Python custom logging initialization
+
+	Current timestamp is added to be able to identify in docker
+	compose logs the date when the log has arrived
+	"""
+	logging.basicConfig(
+		format='%(asctime)s %(levelname)-8s %(message)s',
+		level=logging.DEBUG,
+		datefmt='%Y-%m-%d %H:%M:%S',
+	)
+
+def main():
+  initialize_log()
+
+  try:
+    logging.info('Initializing Digital Signer')
+    args = parse_arguments()
+
+    if not args.input:
+      CovidSurvey().run()
+
+    digital_signer = DigitalSigner()
+    digital_signer.sign(
+      private_key_path=args.private_key,
+      data_path=args.input,
+      output_path=args.output
+    )
+
+    """
+      TODO: Sacar esto, no tiene sentido verificar la firma en este sistema.
+      Pero el sistema encriptador podría verificar la firma antes de encriptar los datos.
+    """
+    digital_signer.verify_sign(
+      public_key_path="/keys/patient_public_key.pem",
+      data_path=args.input,
+      base64_sign_path=args.output
+    )
+
+    logging.info('Finish Digital Signer')
+  except Exception as e:
+    logging.error('Fatal error: {}'.format(e))
+
+main()
