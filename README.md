@@ -17,3 +17,13 @@ El sistema se divide en:
 * **Sistema de descifrado**: mediante la clave privada del organismo autorizado, desencripta el archivo generado por el sistema de cifrado.
 
 ![Vista general](https://user-images.githubusercontent.com/45921171/102136261-ec173780-3e37-11eb-96cf-40ca2ebf3f91.jpg)
+
+## Ejecución
+
+### Firmador digital
+Primero se puede generar un archivo con "datos sensibles" firmado. Para ello se debe ejecutar el `digital_signer`:
+1. Ubicado en la raíz del proyecto ejecutar `./digital_signer.sh` esto iniciará una consola bash en un contenedor de Docker.
+2. Desde la consola se puede ejecutar `./generate_keys.sh` para generar las claves pública y privada RSA necesarias para la firma digital. Las mismas se verán en el host OS en `/digital_signer/keys`.
+3. Ejecutar `./signer -h` para ver los comandos disponibles del firmador digital. Por ejemplo se puede ejecutar `./signer -i covid_ddjj.example.json` lo cuál generará el archivo de la firma digital en `/digital_signer/output/sign_base64`.
+
+
