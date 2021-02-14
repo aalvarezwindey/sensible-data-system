@@ -7,9 +7,8 @@ class DigitalSigner:
   def __init__(self):
     pass
 
-  def sign(self, private_key_path, data_path, output_path):
+  def sign(self, private_key_path, data, output_path):
     logging.debug('private_key_path {}'.format(private_key_path))
-    logging.debug('data_path {}'.format(data_path))
     logging.debug('output_path {}'.format(output_path))
 
     with open(private_key_path, "rb") as private_key_file:
@@ -18,17 +17,14 @@ class DigitalSigner:
       pkey = crypto.load_privatekey(crypto.FILETYPE_PEM, key)
       logging.debug('pkey loaded\n{}\n'.format(pkey))
 
-      with open(data_path) as data_file:
-        data = data_file.read()
-        logging.debug('data loaded\n{}'.format(data))
-        data_bytes = bytes(data, encoding='utf-8')
-        signed_data = OpenSSL.crypto.sign(pkey, data_bytes, "sha256")
-        logging.debug('signed_data\n{}'.format(signed_data))
-        encoded_signed = base64.b64encode(signed_data)
-        logging.debug('encoded_signed\n{}'.format(encoded_signed))
+      data_bytes = data
+      signed_data = OpenSSL.crypto.sign(pkey, data_bytes, "sha256")
+      logging.debug('signed_data\n{}'.format(signed_data))
+      encoded_signed = base64.b64encode(signed_data)
+      logging.debug('encoded_signed\n{}'.format(encoded_signed))
 
-        with open(output_path, "w") as output_file:
-          output_file.write(encoded_signed.decode('utf-8'))
+      with open(output_path, "w") as output_file:
+        output_file.write(encoded_signed.decode('utf-8'))
 
   def verify_sign(self, public_key_path, data_path, base64_sign_path):
     logging.debug('public_key_path {}'.format(public_key_path))

@@ -1,3 +1,8 @@
+def load_file(path):
+  # TODO: borrar esto cuando se haga la implementacion posta
+  with open(path, "rb") as data_file:
+    return data_file.read()
+
 class CovidSurvey:
   def __init__(self):
     self._answers = {}
@@ -8,5 +13,5 @@ class CovidSurvey:
     con preguntas por stdin al usuario/paciente
   """
   def run(self):
-    # TODO
-    pass
+    # TODO: hacerlo posta en lugar de cargar el ejemplo
+    return load_file("ddjj.example.json")
