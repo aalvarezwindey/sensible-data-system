@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import logging
 import argparse
-import tempfile
 from model.covid_survey.covid_survey import CovidSurvey
 from model.digital_signer.digital_signer import DigitalSigner
 from model.asymmetric_cipher.AES_cipher import AESCipher
