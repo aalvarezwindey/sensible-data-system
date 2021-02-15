@@ -1,17 +1,19 @@
-def load_file(path):
-  # TODO: borrar esto cuando se haga la implementacion posta
-  with open(path, "rb") as data_file:
-    return data_file.read()
+import json
+
+KEY_TEMPERATURE = 'temperatura'
+KEY_DRY_COUGH = 'tos_seca'
+KEY_LOSS_OF_SMELL = 'perdida_del_olfato'
+KEY_LOSS_OF_TASTE = 'perdida_del_gusto'
+
+DEFAULT_BOOLEAN_QUESTION = 'n'
 
 class CovidSurvey:
   def __init__(self):
     self._answers = {}
 
-  """
-    La idea es para agregarle un toque de realidad al sistema
-    que se genere un .json similar al covid_ddjj.example.json
-    con preguntas por stdin al usuario/paciente
-  """
   def run(self):
-    # TODO: hacerlo posta en lugar de cargar el ejemplo
-    return load_file("ddjj.example.json")
+    self._answers[KEY_TEMPERATURE] = float(input('Indique su temperatura: '))
+    self._answers[KEY_DRY_COUGH] = input('¿Posee tos seca? [s/N]: ') or DEFAULT_BOOLEAN_QUESTION
+    self._answers[KEY_LOSS_OF_SMELL] = input('¿Ha perdido el olfato? [s/N]: ') or DEFAULT_BOOLEAN_QUESTION
+    self._answers[KEY_LOSS_OF_TASTE] = input('¿Ha perdido el gusto? [s/N]: ') or DEFAULT_BOOLEAN_QUESTION
+    return json.dumps(self._answers).encode("utf-8")
