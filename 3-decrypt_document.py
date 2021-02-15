@@ -17,13 +17,13 @@ def parse_arguments():
   parser.add_argument("-o", "--output", default=DECRYPTED_DDJJ_PATH, help="output for decrypted data (file path)")
   return parser.parse_args()
 
-def decrypt_data(encrypted_key, encrypted_data, iv, doctor_key_path, output_path):
+def decrypt_data(encrypted_symmetric_key_for_doctor, encrypted_data_for_doctor, iv, doctor_key_path, output_path):
     RSA_cipher = RSACipher()
     AES_cipher = AESCipher()
 
-    decrypted_key = RSA_cipher.decrypt(encrypted_key, doctor_key_path)
-    decrypted_data = AES_cipher.decrypt(encrypted_data, decrypted_key, iv)
-    
+    decrypted_key = RSA_cipher.decrypt(encrypted_symmetric_key_for_doctor, doctor_key_path)
+    decrypted_data = AES_cipher.decrypt(encrypted_data_for_doctor, decrypted_key, iv)
+
     write_file(output_path, decrypted_data)
 
 def verify_signature(patient_key, output, signature):
@@ -38,12 +38,12 @@ def main():
 
   try:
     args = parse_arguments()
-    encrypted_data = load_file(args.data)
+    encrypted_data_for_doctor = load_file(args.data)
     symmetric_key = load_file(args.key)
-    encrypted_key = symmetric_key[:-16]
+    encrypted_symmetric_key_for_doctor = symmetric_key[:-16]
     iv = symmetric_key[-16:]
 
-    decrypt_data(encrypted_key, encrypted_data, iv, args.medic_key, args.output)
+    decrypt_data(encrypted_symmetric_key_for_doctor, encrypted_data_for_doctor, iv, args.medic_key, args.output)
     verify_signature(args.patient_key, args.output, args.signature)
 
     logging.info('Finished step 3 - OK')
