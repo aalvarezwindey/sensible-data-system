@@ -6,7 +6,7 @@ from model.covid_survey.covid_survey import CovidSurvey
 from model.digital_signer.digital_signer import DigitalSigner
 from model.asymmetric_cipher.AES_cipher import AESCipher
 from model.asymmetric_cipher.RSA_cipher import RSACipher
-from aux import *
+from auxi import *
 
 def parse_arguments():
   parser = argparse.ArgumentParser()

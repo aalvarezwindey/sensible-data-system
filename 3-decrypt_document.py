@@ -5,7 +5,7 @@ import argparse
 from model.digital_signer.digital_signer import DigitalSigner
 from model.asymmetric_cipher.AES_cipher import AESCipher
 from model.asymmetric_cipher.RSA_cipher import RSACipher
-from aux import *
+from auxi import *
 
 def parse_arguments():
   parser = argparse.ArgumentParser()
@@ -23,6 +23,7 @@ def decrypt_data(encrypted_key, encrypted_data, iv, doctor_key_path, output_path
 
     decrypted_key = RSA_cipher.decrypt(encrypted_key, doctor_key_path)
     decrypted_data = AES_cipher.decrypt(encrypted_data, decrypted_key, iv)
+    
     write_file(output_path, decrypted_data)
 
 def verify_signature(patient_key, output, signature):
