@@ -6,7 +6,7 @@ PATIENT_PUBLIC_KEY_PATH = "keys/patient_keys/public.pem"
 SYSTEM_PUBLIC_KEY_PATH = "keys/system_keys/public.pem"
 SYSTEM_PRIVATE_KEY_PATH = "keys/system_keys/private.pem"
 DOCTOR_PRIVATE_KEY_PATH = "keys/doctor_keys/private.pem"
-DOCTOR_PUBLIC_KEY_PATH = "keys/doctor_keys/public.pem"
+DOCTOR_PUBLIC_KEY_PATH = "keys/doctor_keys"
 
 # First process (create and encrypt document)
 SIGNATURE_PATH = "output/1-encrypt/signature"

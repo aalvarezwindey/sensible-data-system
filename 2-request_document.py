@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 import logging
 import argparse
+import json
 from model.asymmetric_cipher.AES_cipher import AESCipher
 from model.asymmetric_cipher.RSA_cipher import RSACipher
 from auxi import *
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--doctor-public-key", default=DOCTOR_PUBLIC_KEY_PATH, help="public key path to encrypt AES symetric key for doctor")
+    parser.add_argument("-d", "--medic-dni", default="36716274", help="DNI of the medic")
     return parser.parse_args()
 
 def transform_data(symmetric_encrypted_key, encrypted_data, iv, doctor_key_path):
@@ -35,6 +36,14 @@ def main():
 
     try:
         args = parse_arguments()
+        f = open("doctors.json")
+        keys = json.load(f)
+        
+        keyPath = DOCTOR_PUBLIC_KEY_PATH
+        for dni_key in keys["medics"]:
+            if dni_key["DNI"] == args.medic_dni:                
+                keyPath += "/" + dni_key["KEY"]
+                break
 
         # TODO: el doctor debería indicar qué DDJJ y en base a alguna
         # identificación busca el correspondiente
@@ -45,7 +54,7 @@ def main():
         symmetric_encrypted_key = symmetric_key[:-16]
         iv = symmetric_key[-16:]
 
-        transform_data(symmetric_encrypted_key, encrypted_data, iv, args.doctor_public_key)
+        transform_data(symmetric_encrypted_key, encrypted_data, iv, keyPath)
 
         logging.info('Finished step 2 - OK')
     except Exception as e:
