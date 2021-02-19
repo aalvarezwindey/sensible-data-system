@@ -39,11 +39,17 @@ def main():
         f = open("doctors.json")
         keys = json.load(f)
         
+        foundKey = False
         keyPath = DOCTOR_PUBLIC_KEY_PATH
         for dni_key in keys["medics"]:
             if dni_key["DNI"] == args.medic_dni:                
                 keyPath += "/" + dni_key["KEY"]
+                foundKey = True
                 break
+                
+        if not foundKey:
+            logging.error('Unauthorized DNI')
+            return
 
         # TODO: el doctor debería indicar qué DDJJ y en base a alguna
         # identificación busca el correspondiente
